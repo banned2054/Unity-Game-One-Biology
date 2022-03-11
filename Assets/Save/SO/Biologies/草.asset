@@ -18,5 +18,5 @@ MonoBehaviour:
   Price: 2
   Size: 30
   Distance: 1
-  MinWater: 0
+  MinWater: 1
   Needs: 

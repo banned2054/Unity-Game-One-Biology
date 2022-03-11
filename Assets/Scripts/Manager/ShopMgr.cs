@@ -65,11 +65,13 @@ public class ShopMgr : MonoBehaviour
     public void ClearPage()
     {
         _commoditysTransform.DetachChildren();
+        Debug.Log("down begin");
         int i = 0;
         int now = 3 * _currentPage;
         for (i = 0; i < 3 && now <= _dataSo.CurrentLevel; i++)
         {
             now = i + 3 * _currentPage;
+            Debug.Log("now " + now);
             //实例化新的商品
             GameObject newCommodity = Instantiate(_commodityPrefab, _commoditysTransform).gameObject;
             Image commodityImage = newCommodity.transform.GetChild(1).GetComponent<Image>();
@@ -80,9 +82,9 @@ public class ShopMgr : MonoBehaviour
 
             newCommodity.transform.SetParent(_commoditysTransform);
             commodityToggle.group = _toggleGroup;
-            commodityImage.sprite = _dataSo.BiologySos[i].BiologySprite;
-            commodityName.text = _dataSo.BiologySos[i].BiologyName;
-            commodityPrice.text = _dataSo.BiologySos[i].Price.ToString() + "块";
+            commodityImage.sprite = _dataSo.BiologySos[now].BiologySprite;
+            commodityName.text = _dataSo.BiologySos[now].BiologyName;
+            commodityPrice.text = _dataSo.BiologySos[now].Price.ToString() + "块";
             commodityNumb.text = now.ToString();
             commodityToggle.onValueChanged.AddListener(delegate { PutBiology(commodityToggle); });
             now++;
@@ -98,7 +100,7 @@ public class ShopMgr : MonoBehaviour
             Toggle currenToggle = _commoditysTransform.GetChild(i).GetComponent<Toggle>();
             if (currenToggle.isOn)
             {
-                currentNumb = i;
+                currentNumb = i + 3 * _currentPage;
                 break;
             }
         }
@@ -122,6 +124,7 @@ public class ShopMgr : MonoBehaviour
         newBiology.transform.localScale = Vector3.one * _dataSo.BiologySos[currentNumb].Size / 100;
         BiologyUpdate biologyUpdate = newBiology.AddComponent<BiologyUpdate>();
         biologyUpdate.Init(_groundGroupSo, _dataSo.BiologySos[currentNumb], _x, _y);
+        _timeMgr.ContinueGame();
         _timeMgr.UpdateUI();
     }
 }

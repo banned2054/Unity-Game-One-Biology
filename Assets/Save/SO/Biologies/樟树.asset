@@ -16,7 +16,7 @@ MonoBehaviour:
   BiologyName: "\u6A1F\u6811"
   BiologySprite: {fileID: 21300000, guid: d629ef3351d9c9d46b59500be4410b26, type: 3}
   Price: 12
-  Size: 100
+  Size: 50
   Distance: 0
   MinWater: 55
   Needs: 

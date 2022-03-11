@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9ec210f545c5ce418778564c7f382a1, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  TechnologyPoint: 0
-  Money: 20
-  Population: 0
-  CurrentLevel: 0
-  Month: 1
-  Day: 1
-  TimeSpeed: 5
+  TechnologyPoint: 4637
+  Money: 4286
+  Population: 49
+  CurrentLevel: 8
+  Month: 15
+  Day: 7
+  TimeSpeed: 0.1
   GroundPrefab: {fileID: 3169621380848781527, guid: d4fe5fa345d15e8428f96ea71da684f8, type: 3}
   BiologyPrefab: {fileID: 4309718989141820281, guid: af4663fef0fbb274e948a6fea8913860, type: 3}
   GroundLevel:

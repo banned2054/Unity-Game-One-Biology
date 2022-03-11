@@ -18,6 +18,8 @@ public class TimeMgr : MonoBehaviour
     [SerializeField] private GameObject _treePanel;
     [SerializeField] private GameObject _titlePanel;
 
+    private Transform _treeIcons;
+
     public List<UpdateObject> UpdateList;
 
     void Start()
@@ -28,6 +30,7 @@ public class TimeMgr : MonoBehaviour
     public void Init()
     {
         _dayPerTime = _dataSo.TimeSpeed;
+        _treeIcons = _treePanel.transform.GetChild(2).transform;
         _timeGoes = 0;
         _beginFlow = true;
         UpdateUI();
@@ -41,8 +44,6 @@ public class TimeMgr : MonoBehaviour
             _timeGoes += Time.deltaTime;
             if (_timeGoes >= _dayPerTime)
             {
-                //Debug.Log(_timeGoes);
-                Debug.Log(_dayPerTime);
                 _timeGoes = 0;
                 UpdateDate();
             }
@@ -51,7 +52,6 @@ public class TimeMgr : MonoBehaviour
 
     void UpdateDate()
     {
-        Debug.Log("update");
         _timeGoes = 0;
         _dataSo.Day++;
         if (_dataSo.Day > 12)
@@ -59,8 +59,7 @@ public class TimeMgr : MonoBehaviour
             _dataSo.Day = 1;
             _dataSo.Month++;
         }
-
-
+        
         //计算科技点数
         {
             for (int i = _dataSo.TechnologyLevel.Count - 1; i >= 0; i--)
@@ -86,6 +85,8 @@ public class TimeMgr : MonoBehaviour
         _techPointText.text = _dataSo.TechnologyPoint.ToString();
         _moneyText.text = _dataSo.Money.ToString() + "块";
         _populationText.text = _dataSo.Population.ToString();
+
+        UpdateTree();
     }
 
     public void PauseGame()
@@ -98,5 +99,18 @@ public class TimeMgr : MonoBehaviour
     {
         Time.timeScale = 1f;
         _beginFlow = true;
+    }
+
+    void UpdateTree()
+    {
+        for (int i = 0; i <= _dataSo.CurrentLevel; i++)
+        {
+            _treeIcons.GetChild(i).GetComponent<Image>().sprite = _dataSo.TreeIcons[i];
+        }
+
+        for (int i = _dataSo.CurrentLevel + 1; i < 9; i++)
+        {
+            _treeIcons.GetChild(i).GetComponent<Image>().sprite = _dataSo.TreeLockedIcons[i];
+        }
     }
 }

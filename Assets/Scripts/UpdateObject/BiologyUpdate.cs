@@ -13,13 +13,13 @@ public class BiologyUpdate : UpdateObject
     private List<int> _needs;
 
 
-    public void Init(GroundGroupSo groundGroupSo,BiologySo biologySo, int x, int y)
+    public void Init(GroundGroupSo groundGroupSo, BiologySo biologySo, int x, int y)
     {
         _groundGroupSo = groundGroupSo;
-        
+
         _x = x;
         _y = y;
-        
+
         _selfGroundSo = _groundGroupSo.Grounds[x * 10 + y];
         _selfGroundSo.BiologyNumb = 1;
         _selfGroundSo.GroundBiologySo = ScriptableObject.CreateInstance<BiologySo>();
@@ -44,10 +44,13 @@ public class BiologyUpdate : UpdateObject
             float water = _selfGroundSo.Water;
             float needWater = _selfGroundSo.GroundBiologySo.MinWater;
             int waterPercent = Mathf.FloorToInt(water / needWater);
+            Debug.Log("water percent "+waterPercent.ToString());
             maxNumb = waterPercent < 10 ? waterPercent : 10;
+            Debug.Log("max numb "+maxNumb.ToString());
 
             int addNumb = 0;
             addNumb = Mathf.CeilToInt(maxNumb * (0.2f - Mathf.Abs(0.5f - numb * 1.0f / maxNumb) * 0.4f));
+            Debug.Log("add numb " + addNumb.ToString());
 
             _selfGroundSo.BiologyNumb += addNumb;
         }

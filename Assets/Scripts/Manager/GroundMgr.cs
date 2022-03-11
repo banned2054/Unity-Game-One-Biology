@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Mime;
+using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class GroundMgr : MonoBehaviour
 {
+    private GroundGroupSo _groundGroupSo;
     private GameObject _parentGround; //Ground都是parent的子物体
     private Transform _parentTransform; //保存parent的transform方便操作
     private GameObject _electedGround; //鼠标指向的ground
@@ -20,6 +23,10 @@ public class GroundMgr : MonoBehaviour
 
     public void Init(GroundGroupSo groundGroupSo, DataSo dataSo, GameObject maskObject, GameObject infoPanel)
     {
+        GroundUpdate groundUpdate = transform.AddComponent<GroundUpdate>();
+        groundUpdate.Init(groundGroupSo,dataSo);
+
+        _groundGroupSo = groundGroupSo;
         _parentGround = GameObject.Find("Grounds");
         _parentTransform = _parentGround.transform;
         _infoPanel = infoPanel;
@@ -134,12 +141,17 @@ public class GroundMgr : MonoBehaviour
                         buttonText.text = "打开商店";
                         infoButton.onClick.RemoveAllListeners();
                         infoButton.onClick.AddListener(OpenShop);
+                        infoButton.gameObject.SetActive(true);
                     }
                     else
                     {
-                        GameObject electedBiology = _electedGround.transform.GetChild(0).gameObject;
+                        GroundSo currentGroundSo = _groundGroupSo.Grounds[_electX * 10 + _electY];
+                        BiologySo currentBiologySo = currentGroundSo.GroundBiologySo;
+                        infoText.text = "生物：" + currentBiologySo.BiologyName + "\n";
+                        infoText.text += "数量：" + currentGroundSo.BiologyNumb + "\n";
+                        infoText.text += "水分：" + currentGroundSo.Water.ToString();
+                        infoButton.gameObject.SetActive(false);
                     }
-
                 }
             }
         }
@@ -162,7 +174,9 @@ public class GroundMgr : MonoBehaviour
     void OpenShop()
     {
         ShopMgr shopMgr = GetComponent<ShopMgr>();
-        shopMgr.OpenShop(_electX,_electY);
+        shopMgr.OpenShop(_electX, _electY);
         _infoPanel.SetActive(false);
     }
+
+
 }
