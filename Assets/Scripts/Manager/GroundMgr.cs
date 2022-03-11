@@ -10,6 +10,7 @@ public class GroundMgr : MonoBehaviour
     private GameObject _parentGround; //Ground都是parent的子物体
     private Transform _parentTransform; //保存parent的transform方便操作
     private GameObject _electedGround; //鼠标指向的ground
+    private int _electX, _electY;
 
     private GameObject _infoPanel; //ground信息
     private TimeMgr _timeMgr; //游戏暂停
@@ -30,7 +31,6 @@ public class GroundMgr : MonoBehaviour
         int x = -5, y = 0;
 
         List<float> groundLevel = new List<float>(dataSo.GroundLevel);
-        List<Sprite> biologyImage = new List<Sprite>(dataSo.Biologies);
         List<Material> materials = new List<Material>(dataSo.Materials);
 
         GameObject groundPrefab = dataSo.GroundPrefab;
@@ -41,13 +41,11 @@ public class GroundMgr : MonoBehaviour
             int j = 0;
             for (j = groundLevel.Count - 1; j >= 0; j--)
             {
-                if (nowGroundSo.Water > groundLevel[j])
+                if (nowGroundSo.Water >= groundLevel[j])
                 {
                     break;
                 }
             }
-
-            j = j < 0 ? 0 : j;
 
             if (i % 10 == 0)
             {
@@ -81,6 +79,8 @@ public class GroundMgr : MonoBehaviour
                 if (currentCollider.Raycast(ray, out hit, 100f))
                 {
                     _electedGround = currentGround;
+                    _electX = i / 10;
+                    _electY = i % 10;
                     Vector3 electedPosition = _electedGround.transform.position;
                     _maskObejct.transform.position = new Vector3(electedPosition.x, electedPosition.y, -0.2f);
                 }
@@ -132,7 +132,14 @@ public class GroundMgr : MonoBehaviour
                     {
                         infoText.text = "当前没有生物在该土地上";
                         buttonText.text = "打开商店";
+                        infoButton.onClick.RemoveAllListeners();
+                        infoButton.onClick.AddListener(OpenShop);
                     }
+                    else
+                    {
+                        GameObject electedBiology = _electedGround.transform.GetChild(0).gameObject;
+                    }
+
                 }
             }
         }
@@ -154,6 +161,8 @@ public class GroundMgr : MonoBehaviour
 
     void OpenShop()
     {
-        
+        ShopMgr shopMgr = GetComponent<ShopMgr>();
+        shopMgr.OpenShop(_electX,_electY);
+        _infoPanel.SetActive(false);
     }
 }

@@ -20,9 +20,7 @@ public class GameMgr : MonoBehaviour
 
     void Init()
     {
-        GameObject groundMgr = new GameObject("GroundMgr");
-        groundMgr.transform.parent = transform;
-        _groundMgr = groundMgr.AddComponent<GroundMgr>();
+        _groundMgr = this.AddComponent<GroundMgr>();
         _groundMgr.Init(_GroundGroundSO, _DataSo, _maskObject,_infoPanel);
     }
 }

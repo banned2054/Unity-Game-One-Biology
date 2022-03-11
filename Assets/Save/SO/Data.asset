@@ -24,16 +24,6 @@ MonoBehaviour:
   - 0
   - 20
   - 50
-  Prices:
-  - 2
-  - 5
-  - 8
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
   TechnologyLevel:
   - 0
   - 10
@@ -44,16 +34,16 @@ MonoBehaviour:
   - 60
   - 70
   - 100
-  Biologies:
-  - {fileID: 21300000, guid: 79f64bb0a062bae44919bb5a90239daa, type: 3}
-  - {fileID: 21300000, guid: f2860eb8672917f438b11b73d5d7c76c, type: 3}
-  - {fileID: 21300000, guid: b920cb763e5583449baa27f4531ab9cb, type: 3}
-  - {fileID: 21300000, guid: 4177615357172e14da22dc4705616fe6, type: 3}
-  - {fileID: 21300000, guid: 4477423ff14aa2444a0dbcf28d8d36f8, type: 3}
-  - {fileID: 21300000, guid: d3138fed993371a44b113ceac2b7a72a, type: 3}
-  - {fileID: 21300000, guid: d629ef3351d9c9d46b59500be4410b26, type: 3}
-  - {fileID: 21300000, guid: e457dd87b7ef23f4cac90a8299d0e40a, type: 3}
-  - {fileID: 21300000, guid: 2e9f583560c39bf44b7ac45bfdab778e, type: 3}
+  BiologySos:
+  - {fileID: 11400000, guid: 10ebb9392e584bd44ab51f7a2c3470a4, type: 2}
+  - {fileID: 11400000, guid: b82cc99ad1c75d0439301c4422611cd0, type: 2}
+  - {fileID: 11400000, guid: ffbc9ae96e573614b9dbf586eb29a84f, type: 2}
+  - {fileID: 11400000, guid: e4e866f9cae938744af70b9b661c1a1d, type: 2}
+  - {fileID: 11400000, guid: a1755c4269f37f24ab198bc4da389a46, type: 2}
+  - {fileID: 11400000, guid: 90ea46a0442234c49af7038ae621356b, type: 2}
+  - {fileID: 11400000, guid: 582dcb940933c8446b2e921db508da23, type: 2}
+  - {fileID: 11400000, guid: ab10a0f27848a0441bae4d4345b846ac, type: 2}
+  - {fileID: 11400000, guid: 8d0caa381ae7e7e41adb02fc8b45aa49, type: 2}
   Materials:
   - {fileID: 2100000, guid: 4bf298d478e9aa04ab2c18a72ac4983d, type: 2}
   - {fileID: 2100000, guid: 844e899963adf1f42a78cc5f93469c4a, type: 2}

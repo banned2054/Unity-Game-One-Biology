@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: "\u80E1\u841D\u535C"
   m_EditorClassIdentifier: 
   Numb: 3
+  BiologyName: "\u80E1\u841D\u535C"
+  BiologySprite: {fileID: 21300000, guid: 4177615357172e14da22dc4705616fe6, type: 3}
+  Price: 6
   Size: 30
   Distance: 0
   MinWater: 10
