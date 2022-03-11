@@ -21,26 +21,26 @@ public class CameraMgr : MonoBehaviour
     void Update()
     {
         // Check if on the right edge
-        if (Input.mousePosition.x >= Screen.width - mDelta)
-        {
-            // Move the camera
-            transform.position += mRightDirection * Time.deltaTime * mSpeed;
-        }
+        //if (Input.mousePosition.x >= Screen.width - mDelta)
+        //{
+        //    // Move the camera
+        //    transform.position += mRightDirection * Time.deltaTime * mSpeed;
+        //}
 
-        if (Input.mousePosition.x <= 0)
-        {
-            transform.position += mLeftDirection * Time.deltaTime * mSpeed;
-        }
+        //if (Input.mousePosition.x <= 0)
+        //{
+        //    transform.position += mLeftDirection * Time.deltaTime * mSpeed;
+        //}
 
-        if (Input.mousePosition.y >= Screen.height - mDelta)
-        {
-            // Move the camera
-            transform.position += mUpDirection * Time.deltaTime * mSpeed;
-        }
+        //if (Input.mousePosition.y >= Screen.height - mDelta)
+        //{
+        //    // Move the camera
+        //    transform.position += mUpDirection * Time.deltaTime * mSpeed;
+        //}
 
-        if (Input.mousePosition.y <= 70)
-        {
-            transform.position += mDownDirection * Time.deltaTime * mSpeed;
-        }
+        //if (Input.mousePosition.y <= 70)
+        //{
+        //    transform.position += mDownDirection * Time.deltaTime * mSpeed;
+        //}
     }
 }
