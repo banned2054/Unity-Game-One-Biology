@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ec210f545c5ce418778564c7f382a1, type: 3}
+  m_Name: Data
+  m_EditorClassIdentifier: 
+  TechnologyPoint: 0
+  Money: 10
+  Population: 0
+  CurrentLevel: 0
+  Date: 0
+  TimeSpeed: 5
+  GroundPrefab: {fileID: 3169621380848781527, guid: d4fe5fa345d15e8428f96ea71da684f8, type: 3}
+  BiologyPrefab: {fileID: 4309718989141820281, guid: af4663fef0fbb274e948a6fea8913860, type: 3}
+  GroundLevel:
+  - 0
+  - 20
+  - 50
+  Prices:
+  - 2
+  - 5
+  - 8
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  TechnologyLevel:
+  - 0
+  - 10
+  - 20
+  - 30
+  - 40
+  - 50
+  - 60
+  - 70
+  - 100
+  Biologies:
+  - {fileID: 21300000, guid: 79f64bb0a062bae44919bb5a90239daa, type: 3}
+  - {fileID: 21300000, guid: f2860eb8672917f438b11b73d5d7c76c, type: 3}
+  - {fileID: 21300000, guid: b920cb763e5583449baa27f4531ab9cb, type: 3}
+  - {fileID: 21300000, guid: 4177615357172e14da22dc4705616fe6, type: 3}
+  - {fileID: 21300000, guid: 4477423ff14aa2444a0dbcf28d8d36f8, type: 3}
+  - {fileID: 21300000, guid: d3138fed993371a44b113ceac2b7a72a, type: 3}
+  - {fileID: 21300000, guid: d629ef3351d9c9d46b59500be4410b26, type: 3}
+  - {fileID: 21300000, guid: e457dd87b7ef23f4cac90a8299d0e40a, type: 3}
+  - {fileID: 21300000, guid: 2e9f583560c39bf44b7ac45bfdab778e, type: 3}
+  Materials:
+  - {fileID: 2100000, guid: 4bf298d478e9aa04ab2c18a72ac4983d, type: 2}
+  - {fileID: 2100000, guid: 844e899963adf1f42a78cc5f93469c4a, type: 2}
+  - {fileID: 2100000, guid: 09cff8df8bc10324db44c2ecf1e0af32, type: 2}
+  TreeIcons:
+  - {fileID: 21300000, guid: 19a0d7ded1954774687717644fcaadb3, type: 3}
+  - {fileID: 21300000, guid: 82e4163ad5724d647b2ddb3f032bd3e0, type: 3}
+  - {fileID: 21300000, guid: 320a074f1a817504f897aa6cd43bf1b3, type: 3}
+  - {fileID: 21300000, guid: 34a7c9f03bbcc9e47bff065ef095484f, type: 3}
+  - {fileID: 21300000, guid: 048d2d7d58805874db5c412a2e87e88a, type: 3}
+  - {fileID: 21300000, guid: 80dc4816918d20c4fb4ec8301f8b5f04, type: 3}
+  - {fileID: 21300000, guid: 99a908103dd66224a9ceb1b5f6a3d2cf, type: 3}
+  - {fileID: 21300000, guid: de11dc4e72c26fa48aa5f3d0026b1a74, type: 3}
+  - {fileID: 21300000, guid: b43322334d7e96e478f6df9c7960eecb, type: 3}
+  TreeLockedIcons:
+  - {fileID: 21300000, guid: a12b41a9072d5844589bc71213a8cf0c, type: 3}
+  - {fileID: 21300000, guid: 2a835749c445f8a4694d23873fd9e7f8, type: 3}
+  - {fileID: 21300000, guid: b304542cb9ab76647ab01e547ed57f3d, type: 3}
+  - {fileID: 21300000, guid: e95bb4baa43a9c247aad65b326785d67, type: 3}
+  - {fileID: 21300000, guid: 5662e104a2c9ad540b67f9da7783ed54, type: 3}
+  - {fileID: 21300000, guid: 4419720e2320a68468c80002f7fd4c20, type: 3}
+  - {fileID: 21300000, guid: 31ceec854f18f5940a1d1dd8db5d8548, type: 3}
+  - {fileID: 21300000, guid: f503fd9fa064ad34da06187f27ed2f2a, type: 3}
+  - {fileID: 21300000, guid: 62b8aa818286d7640a926e971c6439a1, type: 3}
