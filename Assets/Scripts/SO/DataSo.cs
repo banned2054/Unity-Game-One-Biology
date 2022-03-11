@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New data", menuName = "Save/New data")]

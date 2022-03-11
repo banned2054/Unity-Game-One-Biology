@@ -1,4 +1,3 @@
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +13,7 @@ public class ShopMgr : MonoBehaviour
     [SerializeField] private TimeMgr _timeMgr;
     [SerializeField] private DataSo _dataSo;
     [SerializeField] private GroundGroupSo _groundGroupSo;
+    [SerializeField] private AudioMgr _audioMgr;
 
 
     private Transform _groundTransform;
@@ -126,5 +126,6 @@ public class ShopMgr : MonoBehaviour
         biologyUpdate.Init(_groundGroupSo, _dataSo.BiologySos[currentNumb], _x, _y);
         _timeMgr.ContinueGame();
         _timeMgr.UpdateUI();
+        _audioMgr.Play_audio();
     }
 }
