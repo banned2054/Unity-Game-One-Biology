@@ -10,6 +10,10 @@ public class TimeMgr : MonoBehaviour
     private float _timeGoes;
     private bool _beginFlow;
 
+    [SerializeField] private Text _moneyText;
+    [SerializeField] private Text _techPointText;
+    [SerializeField] private Text _populationText;
+    [SerializeField] private Text _timeText;
     [SerializeField] private DataSo _dataSo;
     [SerializeField] private GameObject _treePanel;
     [SerializeField] private GameObject _titlePanel;
@@ -26,6 +30,7 @@ public class TimeMgr : MonoBehaviour
         _dayPerTime = _dataSo.TimeSpeed;
         _timeGoes = 0;
         _beginFlow = true;
+        UpdateUI();
     }
 
     // Update is called once per frame
@@ -36,6 +41,9 @@ public class TimeMgr : MonoBehaviour
             _timeGoes += Time.deltaTime;
             if (_timeGoes >= _dayPerTime)
             {
+                //Debug.Log(_timeGoes);
+                Debug.Log(_dayPerTime);
+                _timeGoes = 0;
                 UpdateDate();
             }
         }
@@ -43,13 +51,15 @@ public class TimeMgr : MonoBehaviour
 
     void UpdateDate()
     {
+        Debug.Log("update");
         _timeGoes = 0;
-        _dataSo.Today.Day++;
-        if (_dataSo.Today.Day > 12)
+        _dataSo.Day++;
+        if (_dataSo.Day > 12)
         {
-            _dataSo.Today.Day = 1;
-            _dataSo.Today.Month++;
+            _dataSo.Day = 1;
+            _dataSo.Month++;
         }
+
 
         //计算科技点数
         {
@@ -63,11 +73,19 @@ public class TimeMgr : MonoBehaviour
             }
         }
 
-
         for (int i = 0; i < UpdateList.Count; i++)
         {
             UpdateList[i].UpdateTime();
         }
+        UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
+        _timeText.text = _dataSo.Month.ToString() + "月" + _dataSo.Day.ToString() + "日";
+        _techPointText.text = _dataSo.TechnologyPoint.ToString();
+        _moneyText.text = _dataSo.Money.ToString() + "块";
+        _populationText.text = _dataSo.Population.ToString();
     }
 
     public void PauseGame()

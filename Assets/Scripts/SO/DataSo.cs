@@ -6,18 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New data", menuName = "Save/New data")]
 public class DataSo : ScriptableObject
 {
-    public class Date
-    {
-        public int Month;
-        public int Day;
-    }
-
     public float TechnologyPoint; //科技点数
     public float Money; //货币
     public float Population; //人口
     public int CurrentLevel; //当前科技等级
-    public Date Today;
-
+    public int Month;
+    public int Day;
 
     public float TimeSpeed; //一天在现实中所用时间
 

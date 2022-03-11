@@ -10,8 +10,8 @@ public class ChangeSo : MonoBehaviour
     
     public void InitializeDataSo()
     {
-        _dataSO.Today.Day = 1;
-        _dataSO.Today.Month = 1;
+        _dataSO.Day = 1;
+        _dataSO.Month = 1;
         _dataSO.TechnologyPoint = 0;
         _dataSO.Money = 20;
         _dataSO.Population = 0;
@@ -23,7 +23,7 @@ public class ChangeSo : MonoBehaviour
         currentGroundSo.SerialNumb = serialNumb;
         currentGroundSo.GroundBiologySo = null;
         currentGroundSo.BiologyNumb = 0;
-        currentGroundSo.Water = 20;
+        currentGroundSo.Water = 0;
     }
 
     public void InitializeGroundGroupSo()
