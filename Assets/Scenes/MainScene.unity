@@ -1341,7 +1341,7 @@ GameObject:
   - component: {fileID: 417148144}
   - component: {fileID: 417148143}
   m_Layer: 0
-  m_Name: submp3
+  m_Name: AudioPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
