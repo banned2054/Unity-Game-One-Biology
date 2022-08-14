@@ -174,6 +174,4 @@ public class GroundMgr : MonoBehaviour
         shopMgr.OpenShop(_electX, _electY);
         _infoPanel.SetActive(false);
     }
-
-
 }

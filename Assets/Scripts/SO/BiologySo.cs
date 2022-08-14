@@ -17,6 +17,8 @@ public class BiologySo : ScriptableObject
     public float MinWater;
     public List<int> Needs;
 
+    public Vector3 PositionOffset;
+
     public BiologySo(BiologySo biologySo)
     {
         Numb = biologySo.Numb;

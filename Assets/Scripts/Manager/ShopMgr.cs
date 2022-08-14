@@ -64,16 +64,20 @@ public class ShopMgr : MonoBehaviour
 
     public void ClearPage()
     {
-        _commoditysTransform.DetachChildren();
-        Debug.Log("down begin");
+        foreach (Transform child in _commoditysTransform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
         int i = 0;
         int now = 3 * _currentPage;
         for (i = 0; i < 3 && now <= _dataSo.CurrentLevel; i++)
         {
             now = i + 3 * _currentPage;
-            Debug.Log("now " + now);
             //实例化新的商品
             GameObject newCommodity = Instantiate(_commodityPrefab, _commoditysTransform).gameObject;
+
+
             Image commodityImage = newCommodity.transform.GetChild(1).GetComponent<Image>();
             Text commodityName = newCommodity.transform.GetChild(2).GetComponent<Text>();
             Text commodityPrice = newCommodity.transform.GetChild(3).GetComponent<Text>();
@@ -81,6 +85,7 @@ public class ShopMgr : MonoBehaviour
             Toggle commodityToggle = newCommodity.GetComponent<Toggle>();
 
             newCommodity.transform.SetParent(_commoditysTransform);
+
             commodityToggle.group = _toggleGroup;
             commodityImage.sprite = _dataSo.BiologySos[now].BiologySprite;
             commodityName.text = _dataSo.BiologySos[now].BiologyName;
@@ -115,11 +120,12 @@ public class ShopMgr : MonoBehaviour
 
         _shopPanel.SetActive(false);
 
-        Debug.Log(currentNumb);
         Vector3 parentVector3 = _groundTransform.position;
         GameObject newBiology = Instantiate(_biologyPrefab, _groundTransform);
         newBiology.transform.Rotate(-30, 0, 0, Space.Self);
-        newBiology.transform.position = new Vector3(parentVector3.x, parentVector3.y, -0.5f);
+        newBiology.transform.position = new Vector3(parentVector3.x, parentVector3.y, -0.5f) +
+                                        _dataSo.BiologySos[currentNumb].PositionOffset;
+
         newBiology.GetComponent<SpriteRenderer>().sprite = _dataSo.BiologySos[currentNumb].BiologySprite;
         newBiology.transform.localScale = Vector3.one * _dataSo.BiologySos[currentNumb].Size / 100;
         BiologyUpdate biologyUpdate = newBiology.AddComponent<BiologyUpdate>();

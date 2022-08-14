@@ -20,3 +20,4 @@ MonoBehaviour:
   Distance: 3
   MinWater: 30
   Needs: 0200000003000000
+  PositionOffset: {x: 0, y: 0, z: -0.5}
