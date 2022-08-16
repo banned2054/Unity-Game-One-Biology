@@ -87,6 +87,7 @@ public class GroundMgr : MonoBehaviour
                     _electY = i % 10;
                     Vector3 electedPosition = _electedGround.transform.position;
                     _maskObejct.transform.position = new Vector3(electedPosition.x, electedPosition.y, -0.2f);
+                    break;
                 }
             }
 
