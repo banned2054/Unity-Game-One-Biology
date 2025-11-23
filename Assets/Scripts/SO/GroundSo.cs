@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using SO;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New ground", menuName = "Save/New ground")]

@@ -1,178 +1,182 @@
+using SO;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UpdateObject;
 
-public class GroundMgr : MonoBehaviour
+namespace Manager
 {
-    private GroundGroupSo _groundGroupSo;
-    private GameObject _parentGround; //Ground∂º «parentµƒ◊”ŒÔÃÂ
-    private Transform _parentTransform; //±£¥Êparentµƒtransform∑Ω±„≤Ÿ◊˜
-    private GameObject _electedGround; // Û±Í÷∏œÚµƒground
-    private int _electX, _electY;
-
-    private GameObject _infoPanel; //ground–≈œ¢
-    private TimeMgr _timeMgr; //”Œœ∑‘›Õ£
-    private GameObject _maskObejct; //’⁄’÷‘⁄ground…œ
-
-    private Vector3 _defaultMaskPostion = new Vector3(-114514, -114514, 0);
-
-    public void Init(GroundGroupSo groundGroupSo, DataSo dataSo, GameObject maskObject, GameObject infoPanel)
+    public class GroundMgr : MonoBehaviour
     {
-        GroundUpdate groundUpdate = transform.AddComponent<GroundUpdate>();
-        groundUpdate.Init(groundGroupSo,dataSo);
+        private readonly Vector3 _defaultMaskPosition = new(-114514, -114514, 0);
 
-        _groundGroupSo = groundGroupSo;
-        _parentGround = GameObject.Find("Grounds");
-        _parentTransform = _parentGround.transform;
-        _infoPanel = infoPanel;
+        private GameObject _parentGround;    //GroundÈÉΩÊòØparentÁöÑÂ≠êÁâ©‰Ωì
+        private GameObject _electedGround;   //Èº†Ê†áÊåáÂêëÁöÑground
+        private GameObject _infoPanel;       //ground‰ø°ÊÅØ
+        private GameObject _maskObject;      //ÈÅÆÁΩ©Âú®ground‰∏ä
+        private Transform  _parentTransform; //‰øùÂ≠òparentÁöÑtransformÊñπ‰æøÊìç‰Ωú
 
-        _timeMgr = GameObject.Find("Events").GetComponent<TimeMgr>();
+        private Camera   _camera;
+        private Button   _infoButton;
+        private TMP_Text _infoText;
+        private TMP_Text _buttonText;
 
-        _maskObejct = maskObject;
+        private GroundGroupSo _groundGroupSo;
+        private TimeMgr       _timeMgr; //Ê∏∏ÊàèÊöÇÂÅú
 
-        int x = -5, y = 0;
+        private int _electX, _electY;
 
-        List<float> groundLevel = new List<float>(dataSo.GroundLevel);
-        List<Material> materials = new List<Material>(dataSo.Materials);
-
-        GameObject groundPrefab = dataSo.GroundPrefab;
-
-        for (int i = 0; i < groundGroupSo.Grounds.Count; i++)
+        public void Init(GroundGroupSo groundGroupSo, DataSo dataSo, GameObject maskObject, GameObject infoPanel)
         {
-            GroundSo nowGroundSo = groundGroupSo.Grounds[i];
-            int j = 0;
-            for (j = groundLevel.Count - 1; j >= 0; j--)
+            var groundUpdate = transform.AddComponent<GroundUpdate>();
+            groundUpdate.Init(groundGroupSo, dataSo);
+
+            _groundGroupSo   = groundGroupSo;
+            _parentGround    = GameObject.Find("Grounds");
+            _parentTransform = _parentGround.transform;
+            _infoPanel       = infoPanel;
+
+            _timeMgr = GameObject.Find("Events").GetComponent<TimeMgr>();
+
+            _maskObject = maskObject;
+
+            int x = -5, y = 0;
+
+            var groundLevel = new List<float>(dataSo.GroundLevel);
+            var materials   = new List<Material>(dataSo.Materials);
+
+            var groundPrefab = dataSo.GroundPrefab;
+
+            for (var i = 0; i < groundGroupSo.grounds.Count; i++)
             {
-                if (nowGroundSo.Water >= groundLevel[j])
+                var nowGroundSo = groundGroupSo.grounds[i];
+                int j;
+                for (j = groundLevel.Count - 1; j >= 0; j--)
                 {
-                    break;
+                    if (nowGroundSo.Water >= groundLevel[j])
+                    {
+                        break;
+                    }
                 }
+
+                if (i % 10 == 0)
+                {
+                    x += 5;
+                    y =  0;
+                }
+                else
+                {
+                    y += 5;
+                }
+
+                var newGround = Instantiate(groundPrefab, new Vector3(x, y, 0), Quaternion.identity);
+                newGround.GetComponent<MeshRenderer>().material = materials[j];
+                newGround.transform.SetParent(_parentTransform);
             }
 
-            if (i % 10 == 0)
-            {
-                x += 5;
-                y = 0;
-            }
-            else
-            {
-                y += 5;
-            }
-
-            GameObject newGround = Instantiate(groundPrefab, new Vector3(x, y, 0), Quaternion.identity);
-            newGround.GetComponent<MeshRenderer>().material = materials[j];
-            newGround.transform.SetParent(_parentTransform);
+            _camera     = GameObject.Find("Main Camera").GetComponent<Camera>();
+            _infoButton = _infoPanel.transform.GetChild(2).GetComponent<Button>();
+            _infoText   = _infoPanel.transform.GetChild(1).GetComponent<TMP_Text>();
+            _buttonText = _infoButton.transform.GetChild(0).GetComponent<TMP_Text>();
         }
-    }
 
-    void Update()
-    {
-        if (!EventSystem.current.IsPointerOverGameObject() && IsMouseOverGameWindow) // Û±Í√ª”–µ„µΩui
+        private void Update()
         {
-            //≈–∂œ Û±Í‘⁄
-            Camera cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            for (int i = 0; i < _parentTransform.childCount; i++)
+            if (!EventSystem.current.IsPointerOverGameObject() && IsMouseOverGameWindow) //Èº†Ê†áÊ≤°ÊúâÁÇπÂà∞ui
             {
-                GameObject currentGround = _parentTransform.GetChild(i).gameObject;
-                Collider currentCollider = currentGround.GetComponent<Collider>();
-                if (currentCollider.Raycast(ray, out hit, 100f))
+                //Âà§Êñ≠Èº†Ê†áÂú®
+                var ray = _camera.ScreenPointToRay(Input.mousePosition);
+
+                for (var i = 0; i < _parentTransform.childCount; i++)
                 {
+                    var currentGround   = _parentTransform.GetChild(i).gameObject;
+                    var currentCollider = currentGround.GetComponent<Collider>();
+                    if (!currentCollider.Raycast(ray, out _, 100f)) continue;
                     _electedGround = currentGround;
-                    _electX = i / 10;
-                    _electY = i % 10;
-                    Vector3 electedPosition = _electedGround.transform.position;
-                    _maskObejct.transform.position = new Vector3(electedPosition.x, electedPosition.y, -0.2f);
+                    _electX        = i / 10;
+                    _electY        = i % 10;
+                    var electedPosition = _electedGround.transform.position;
+                    _maskObject.transform.position = new Vector3(electedPosition.x, electedPosition.y, -0.2f);
                     break;
                 }
-            }
 
-            if (Input.GetMouseButtonDown(0))
-            {
+                if (!Input.GetMouseButtonDown(0)) return;
                 _timeMgr.PauseGame();
                 _infoPanel.SetActive(true);
 
-                //info panel ∂®Œª
+                //info panel ÂÆö‰Ωç
                 {
-                    Vector3 mousePostion = Input.mousePosition;
-                    _infoPanel.transform.position = mousePostion + new Vector3(100, 0, 0);
+                    var mousePosition = Input.mousePosition;
+                    _infoPanel.transform.position = mousePosition + new Vector3(100, 0, 0);
 
 
                     if (_infoPanel.transform.position.y > 547)
                     {
                         _infoPanel.transform.position = new Vector3(_infoPanel.transform.position.x, 547,
-                            _infoPanel.transform.position.z);
+                                                                    _infoPanel.transform.position.z);
                     }
 
                     if (_infoPanel.transform.position.y < 90)
                     {
                         _infoPanel.transform.position = new Vector3(_infoPanel.transform.position.x, 90,
-                            _infoPanel.transform.position.z);
+                                                                    _infoPanel.transform.position.z);
                     }
 
                     if (_infoPanel.transform.position.x > 540)
                     {
-                        _infoPanel.transform.position = new Vector3(mousePostion.x - 100,
-                            _infoPanel.transform.position.y,
-                            _infoPanel.transform.position.z);
+                        _infoPanel.transform.position = new Vector3(mousePosition.x - 100,
+                                                                    _infoPanel.transform.position.y,
+                                                                    _infoPanel.transform.position.z);
                     }
 
                     if (_infoPanel.transform.position.x < -550)
                     {
                         _infoPanel.transform.position = new Vector3(-550, _infoPanel.transform.position.y,
-                            _infoPanel.transform.position.z);
+                                                                    _infoPanel.transform.position.z);
                     }
                 }
-
-                Text infoText = _infoPanel.transform.GetChild(1).GetComponent<Text>();
-                Button infoButton = _infoPanel.transform.GetChild(2).GetComponent<Button>();
-                Text buttonText = infoButton.transform.GetChild(0).GetComponent<Text>();
 
                 {
                     if (_electedGround.transform.childCount == 0)
                     {
-                        infoText.text = "µ±«∞√ª”–…˙ŒÔ‘⁄∏√Õ¡µÿ…œ";
-                        buttonText.text = "¥Úø™…ÃµÍ";
-                        infoButton.onClick.RemoveAllListeners();
-                        infoButton.onClick.AddListener(OpenShop);
-                        infoButton.gameObject.SetActive(true);
+                        _infoText.text   = "ÂΩìÂâçÊ≤°ÊúâÁîüÁâ©Âú®ËØ•ÂúüÂú∞‰∏ä";
+                        _buttonText.text = "ÊâìÂºÄÂïÜÂ∫ó";
+                        _infoButton.onClick.RemoveAllListeners();
+                        _infoButton.onClick.AddListener(OpenShop);
+                        _infoButton.gameObject.SetActive(true);
                     }
                     else
                     {
-                        GroundSo currentGroundSo = _groundGroupSo.Grounds[_electX * 10 + _electY];
-                        BiologySo currentBiologySo = currentGroundSo.GroundBiologySo;
-                        infoText.text = "…˙ŒÔ£∫" + currentBiologySo.BiologyName + "\n";
-                        infoText.text += " ˝¡ø£∫" + currentGroundSo.BiologyNumb + "\n";
-                        infoText.text += "ÀÆ∑÷£∫" + currentGroundSo.Water.ToString();
-                        infoButton.gameObject.SetActive(false);
+                        var currentGroundSo  = _groundGroupSo.grounds[_electX * 10 + _electY];
+                        var currentBiologySo = currentGroundSo.GroundBiologySo;
+                        _infoText.text =  $"ÁîüÁâ©Ôºö{currentBiologySo.biologyName}\n";
+                        _infoText.text += $"Êï∞ÈáèÔºö{currentGroundSo.BiologyNumb}\n";
+                        _infoText.text += $"Ê∞¥ÂàÜÔºö{currentGroundSo.Water}";
+                        _infoButton.gameObject.SetActive(false);
                     }
                 }
             }
+
+            else
+            {
+                _maskObject.transform.position = _defaultMaskPosition;
+            }
         }
 
-        else
+        private static bool IsMouseOverGameWindow =>
+            !(0             > Input.mousePosition.x ||
+              0             > Input.mousePosition.y ||
+              Screen.width  < Input.mousePosition.x ||
+              Screen.height < Input.mousePosition.y);
+
+        private void OpenShop()
         {
-            _maskObejct.transform.position = _defaultMaskPostion;
+            var shopMgr = GetComponent<ShopMgr>();
+            shopMgr.OpenShop(_electX, _electY);
+            _infoPanel.SetActive(false);
         }
-    }
-
-    bool IsMouseOverGameWindow
-    {
-        get
-        {
-            return !(0 > Input.mousePosition.x || 0 > Input.mousePosition.y || Screen.width < Input.mousePosition.x ||
-                     Screen.height < Input.mousePosition.y);
-        }
-    }
-
-    void OpenShop()
-    {
-        ShopMgr shopMgr = GetComponent<ShopMgr>();
-        shopMgr.OpenShop(_electX, _electY);
-        _infoPanel.SetActive(false);
     }
 }

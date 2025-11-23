@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneMgr : MonoBehaviour
+namespace Manager
 {
-    public void SwitchScene(string sceneName)
+    public class SceneMgr : MonoBehaviour
     {
-        SceneManager.LoadScene(sceneName);
-    }
+        public void SwitchScene(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
 
-    public void GameOver()
-    {
-        Application.Quit();
+        public void GameOver()
+        {
+            Application.Quit();
+        }
     }
 }

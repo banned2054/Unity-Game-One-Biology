@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e535cd8f93e9aea459c25f0f070e4387, type: 3}
   m_Name: Ground Group
   m_EditorClassIdentifier: 
-  Grounds:
+  grounds:
   - {fileID: 11400000, guid: 1f348e675a53abe4eb8b51ff27d2c611, type: 2}
   - {fileID: 11400000, guid: 9212c23c08f868a4e967dc4de4e6bc8e, type: 2}
   - {fileID: 11400000, guid: 99aad335efb70aa47859c9ce9cef9117, type: 2}

@@ -1,40 +1,44 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CameraMgr : MonoBehaviour
+namespace Manager
 {
-    public Slider SpeedSlider;
-
-    float mDelta = 10; // Pixels. The width border at the edge in which the movement work
-    float mSpeed = 5.0f; // Scale. Speed of the movement
-
-    private Vector3 mRightDirection = Vector3.right;
-    private Vector3 mLeftDirection = Vector3.left;
-    private Vector3 mUpDirection = Vector3.up;
-    private Vector3 mDownDirection = Vector3.down;
-
-    void Update()
+    public class CameraMgr : MonoBehaviour
     {
-        mSpeed = SpeedSlider.value;
+        public Slider speedSlider;
 
-        if (Input.mousePosition.x >= Screen.width - mDelta)
-        {
-            transform.position += mRightDirection * Time.deltaTime * mSpeed;
-        }
+        private const float MDelta = 10;
 
-        if (Input.mousePosition.x <= 0)
-        {
-            transform.position += mLeftDirection * Time.deltaTime * mSpeed;
-        }
+        private float _mSpeed = 5.0f;
 
-        if (Input.mousePosition.y >= Screen.height - mDelta)
-        {
-            transform.position += mUpDirection * Time.deltaTime * mSpeed;
-        }
+        private readonly Vector3 _mRightDirection = Vector3.right;
+        private readonly Vector3 _mLeftDirection  = Vector3.left;
+        private readonly Vector3 _mUpDirection    = Vector3.up;
+        private readonly Vector3 _mDownDirection  = Vector3.down;
 
-        if (Input.mousePosition.y <= 70)
+        private void Update()
         {
-            transform.position += mDownDirection * Time.deltaTime * mSpeed;
+            _mSpeed = speedSlider.value;
+
+            if (Input.mousePosition.x >= Screen.width - MDelta)
+            {
+                transform.position += _mRightDirection * (Time.deltaTime * _mSpeed);
+            }
+
+            if (Input.mousePosition.x <= 0)
+            {
+                transform.position += _mLeftDirection * (Time.deltaTime * _mSpeed);
+            }
+
+            if (Input.mousePosition.y >= Screen.height - MDelta)
+            {
+                transform.position += _mUpDirection * (Time.deltaTime * _mSpeed);
+            }
+
+            if (Input.mousePosition.y <= 70)
+            {
+                transform.position += _mDownDirection * (Time.deltaTime * _mSpeed);
+            }
         }
     }
 }

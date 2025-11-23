@@ -1,137 +1,158 @@
+using SO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UpdateObject;
 
-
-public class ShopMgr : MonoBehaviour
+namespace Manager
 {
-    [SerializeField] private GameObject _commodityPrefab;
-    [SerializeField] private GameObject _biologyPrefab;
-    [SerializeField] private GameObject _shopPanel;
-    [SerializeField] private Transform _commoditysTransform;
-    [SerializeField] private Button _upButton;
-    [SerializeField] private Button _downButton;
-    [SerializeField] private TimeMgr _timeMgr;
-    [SerializeField] private DataSo _dataSo;
-    [SerializeField] private GroundGroupSo _groundGroupSo;
-    [SerializeField] private AudioMgr _audioMgr;
-
-
-    private Transform _groundTransform;
-    private int _commodityPage = 0;
-    private int _currentPage = 0;
-    private ToggleGroup _toggleGroup;
-    private int _x, _y;
-
-    public void OpenShop(int x, int y)
+    public class ShopMgr : MonoBehaviour
     {
-        _x = x;
-        _y = y;
-        _toggleGroup = _commoditysTransform.GetComponent<ToggleGroup>();
-        GameObject grounds = GameObject.Find("Grounds");
-        _groundTransform = grounds.transform.GetChild(x * 10 + y);
-        _currentPage = 0;
-        _shopPanel.SetActive(true);
-        if (_dataSo.CurrentLevel > 3)
+        [SerializeField]
+        private GameObject commodityPrefab;
+
+        [SerializeField]
+        private GameObject biologyPrefab;
+
+        [SerializeField]
+        private GameObject shopPanel;
+
+        [SerializeField]
+        private Transform commoditiesTransform;
+
+        [SerializeField]
+        private Button upButton;
+
+        [SerializeField]
+        private Button downButton;
+
+        [SerializeField]
+        private TimeMgr timeMgr;
+
+        [SerializeField]
+        private DataSo dataSo;
+
+        [SerializeField]
+        private GroundGroupSo groundGroupSo;
+
+        [SerializeField]
+        private AudioMgr audioMgr;
+
+        private Transform   _groundTransform;
+        private ToggleGroup _toggleGroup;
+
+        private int _commodityPage;
+        private int _currentPage;
+        private int _x, _y;
+
+        public void OpenShop(int x, int y)
         {
-            _commodityPage = _dataSo.CurrentLevel / 3;
-        }
-        else
-        {
-            _commodityPage = 0;
-        }
-
-        ClearPage();
-        _upButton.onClick.RemoveAllListeners();
-        _downButton.onClick.RemoveAllListeners();
-        _upButton.onClick.AddListener(UpPage);
-        _downButton.onClick.AddListener(DownPage);
-    }
-
-    public void UpPage()
-    {
-        if (_currentPage == 0) return;
-        //«Â¿ÌÀ˘”–“—”–…Ã∆∑
-        _currentPage--;
-        ClearPage();
-    }
-
-    public void DownPage()
-    {
-        if (_currentPage == _commodityPage) return;
-        _currentPage++;
-        ClearPage();
-    }
-
-    public void ClearPage()
-    {
-        foreach (Transform child in _commoditysTransform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
-
-        int i = 0;
-        int now = 3 * _currentPage;
-        for (i = 0; i < 3 && now <= _dataSo.CurrentLevel; i++)
-        {
-            now = i + 3 * _currentPage;
-            // µ¿˝ªØ–¬µƒ…Ã∆∑
-            GameObject newCommodity = Instantiate(_commodityPrefab, _commoditysTransform).gameObject;
-
-
-            Image commodityImage = newCommodity.transform.GetChild(1).GetComponent<Image>();
-            Text commodityName = newCommodity.transform.GetChild(2).GetComponent<Text>();
-            Text commodityPrice = newCommodity.transform.GetChild(3).GetComponent<Text>();
-            Text commodityNumb = newCommodity.transform.GetChild(4).GetComponent<Text>();
-            Toggle commodityToggle = newCommodity.GetComponent<Toggle>();
-
-            newCommodity.transform.SetParent(_commoditysTransform);
-
-            commodityToggle.group = _toggleGroup;
-            commodityImage.sprite = _dataSo.BiologySos[now].BiologySprite;
-            commodityName.text = _dataSo.BiologySos[now].BiologyName;
-            commodityPrice.text = _dataSo.BiologySos[now].Price.ToString() + "øÈ";
-            commodityNumb.text = now.ToString();
-            commodityToggle.onValueChanged.AddListener(delegate { PutBiology(commodityToggle); });
-            now++;
-        }
-    }
-
-    public void PutBiology(Toggle paraToggle)
-    {
-        if (!paraToggle.isOn) return;
-        int currentNumb = 0;
-        for (int i = 0; i < _commoditysTransform.childCount; i++)
-        {
-            Toggle currenToggle = _commoditysTransform.GetChild(i).GetComponent<Toggle>();
-            if (currenToggle.isOn)
+            _x           = x;
+            _y           = y;
+            _toggleGroup = commoditiesTransform.GetComponent<ToggleGroup>();
+            var grounds = GameObject.Find("Grounds");
+            _groundTransform = grounds.transform.GetChild(x * 10 + y);
+            _currentPage     = 0;
+            shopPanel.SetActive(true);
+            if (dataSo.CurrentLevel > 3)
             {
-                currentNumb = i + 3 * _currentPage;
-                break;
+                _commodityPage = dataSo.CurrentLevel / 3;
+            }
+            else
+            {
+                _commodityPage = 0;
+            }
+
+            ClearPage();
+            upButton.onClick.RemoveAllListeners();
+            downButton.onClick.RemoveAllListeners();
+            upButton.onClick.AddListener(UpPage);
+            downButton.onClick.AddListener(DownPage);
+        }
+
+        public void UpPage()
+        {
+            if (_currentPage == 0) return;
+            //Ê∏ÖÁêÜÊâÄÊúâÂ∑≤ÊúâÂïÜÂìÅ
+            _currentPage--;
+            ClearPage();
+        }
+
+        public void DownPage()
+        {
+            if (_currentPage == _commodityPage) return;
+            _currentPage++;
+            ClearPage();
+        }
+
+        public void ClearPage()
+        {
+            foreach (Transform child in commoditiesTransform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            var i   = 0;
+            var now = 3 * _currentPage;
+            for (i = 0; i < 3 && now <= dataSo.CurrentLevel; i++)
+            {
+                now = i + 3 * _currentPage;
+                //ÂÆû‰æãÂåñÊñ∞ÁöÑÂïÜÂìÅ
+                var newCommodity = Instantiate(commodityPrefab, commoditiesTransform).gameObject;
+
+                var commodityImage  = newCommodity.transform.GetChild(1).GetComponent<Image>();
+                var commodityName   = newCommodity.transform.GetChild(2).GetComponent<TMP_Text>();
+                var commodityPrice  = newCommodity.transform.GetChild(3).GetComponent<TMP_Text>();
+                var commodityNumb   = newCommodity.transform.GetChild(4).GetComponent<TMP_Text>();
+                var commodityToggle = newCommodity.GetComponent<Toggle>();
+
+                newCommodity.transform.SetParent(commoditiesTransform);
+
+                commodityToggle.group = _toggleGroup;
+                commodityImage.sprite = dataSo.BiologySos[now].biologySprite;
+                commodityName.text    = dataSo.BiologySos[now].biologyName;
+                commodityPrice.text   = $"{dataSo.BiologySos[now].price}Âùó";
+                commodityNumb.text    = now.ToString();
+                commodityToggle.onValueChanged.AddListener(delegate { PutBiology(commodityToggle); });
+                now++;
             }
         }
 
-        if (_dataSo.BiologySos[currentNumb].Price > _dataSo.Money)
+        public void PutBiology(Toggle paraToggle)
         {
-            return;
+            if (!paraToggle.isOn) return;
+            var currentNumb = 0;
+            for (var i = 0; i < commoditiesTransform.childCount; i++)
+            {
+                var currentToggle = commoditiesTransform.GetChild(i).GetComponent<Toggle>();
+                if (!currentToggle.isOn) continue;
+                currentNumb = i + 3 * _currentPage;
+                break;
+            }
+
+            if (dataSo.BiologySos[currentNumb].price > dataSo.Money)
+            {
+                return;
+            }
+
+            dataSo.Money -= dataSo.BiologySos[currentNumb].price;
+
+
+            shopPanel.SetActive(false);
+
+            var parentVector3 = _groundTransform.position;
+            var newBiology    = Instantiate(biologyPrefab, _groundTransform);
+            newBiology.transform.Rotate(-30, 0, 0, Space.Self);
+            newBiology.transform.position = new Vector3(parentVector3.x, parentVector3.y, -0.5f) +
+                                            dataSo.BiologySos[currentNumb].PositionOffset;
+
+            newBiology.GetComponent<SpriteRenderer>().sprite = dataSo.BiologySos[currentNumb].biologySprite;
+            newBiology.transform.localScale                  = Vector3.one * dataSo.BiologySos[currentNumb].size / 100;
+            var biologyUpdate = newBiology.AddComponent<BiologyUpdate>();
+            biologyUpdate.Init(groundGroupSo, dataSo.BiologySos[currentNumb], _x, _y);
+            timeMgr.ContinueGame();
+            timeMgr.UpdateUI();
+            audioMgr.Play_audio();
         }
-
-        _dataSo.Money -= _dataSo.BiologySos[currentNumb].Price;
-
-
-        _shopPanel.SetActive(false);
-
-        Vector3 parentVector3 = _groundTransform.position;
-        GameObject newBiology = Instantiate(_biologyPrefab, _groundTransform);
-        newBiology.transform.Rotate(-30, 0, 0, Space.Self);
-        newBiology.transform.position = new Vector3(parentVector3.x, parentVector3.y, -0.5f) +
-                                        _dataSo.BiologySos[currentNumb].PositionOffset;
-
-        newBiology.GetComponent<SpriteRenderer>().sprite = _dataSo.BiologySos[currentNumb].BiologySprite;
-        newBiology.transform.localScale = Vector3.one * _dataSo.BiologySos[currentNumb].Size / 100;
-        BiologyUpdate biologyUpdate = newBiology.AddComponent<BiologyUpdate>();
-        biologyUpdate.Init(_groundGroupSo, _dataSo.BiologySos[currentNumb], _x, _y);
-        _timeMgr.ContinueGame();
-        _timeMgr.UpdateUI();
-        _audioMgr.Play_audio();
     }
 }

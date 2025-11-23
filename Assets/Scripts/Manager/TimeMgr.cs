@@ -1,114 +1,125 @@
 using System.Collections.Generic;
+using System.Globalization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeMgr : MonoBehaviour
+namespace Manager
 {
-    private float _dayPerTime;
-    private float _timeGoes;
-    private bool _beginFlow;
-
-    [SerializeField] private Text _moneyText;
-    [SerializeField] private Text _techPointText;
-    [SerializeField] private Text _populationText;
-    [SerializeField] private Text _timeText;
-    [SerializeField] private DataSo _dataSo;
-    [SerializeField] private GameObject _treePanel;
-    [SerializeField] private GameObject _titlePanel;
-
-    private Transform _treeIcons;
-
-    public List<UpdateObject> UpdateList;
-
-    void Start()
+    public class TimeMgr : MonoBehaviour
     {
-        _beginFlow = false;
-    }
+        private float _dayPerTime;
+        private float _timeGoes;
+        private bool  _beginFlow;
 
-    public void Init()
-    {
-        _dayPerTime = _dataSo.TimeSpeed;
-        _treeIcons = _treePanel.transform.GetChild(2).transform;
-        _timeGoes = 0;
-        _beginFlow = true;
-        UpdateUI();
-    }
+        [SerializeField]
+        private TMP_Text moneyText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (_beginFlow)
+        [SerializeField]
+        private TMP_Text techPointText;
+
+        [SerializeField]
+        private TMP_Text populationText;
+
+        [SerializeField]
+        private TMP_Text timeText;
+
+        [SerializeField]
+        private DataSo dataSo;
+
+        [SerializeField]
+        private GameObject treePanel;
+
+        [SerializeField]
+        private GameObject titlePanel;
+
+        private Transform _treeIcons;
+
+        public List<UpdateBase> updateList;
+
+        private void Start()
         {
+            _beginFlow = false;
+        }
+
+        public void Init()
+        {
+            _dayPerTime = dataSo.TimeSpeed;
+            _treeIcons  = treePanel.transform.GetChild(2).transform;
+            _timeGoes   = 0;
+            _beginFlow  = true;
+            UpdateUI();
+        }
+
+        private void Update()
+        {
+            if (!_beginFlow) return;
             _timeGoes += Time.deltaTime;
-            if (_timeGoes >= _dayPerTime)
+            if (!(_timeGoes >= _dayPerTime)) return;
+            _timeGoes = 0;
+            UpdateDate();
+        }
+
+        private void UpdateDate()
+        {
+            _timeGoes = 0;
+            dataSo.Day++;
+            if (dataSo.Day > 12)
             {
-                _timeGoes = 0;
-                UpdateDate();
+                dataSo.Day = 1;
+                dataSo.Month++;
             }
-        }
-    }
 
-    void UpdateDate()
-    {
-        _timeGoes = 0;
-        _dataSo.Day++;
-        if (_dataSo.Day > 12)
-        {
-            _dataSo.Day = 1;
-            _dataSo.Month++;
-        }
-        
-        //计算科技点数
-        {
-            for (int i = _dataSo.TechnologyLevel.Count - 1; i >= 0; i--)
+            //计算科技点数
+            for (var i = dataSo.TechnologyLevel.Count - 1; i >= 0; i--)
             {
-                if (_dataSo.TechnologyPoint >= _dataSo.TechnologyLevel[i])
-                {
-                    _dataSo.CurrentLevel = i;
-                    break;
-                }
+                if (!(dataSo.TechnologyPoint >= dataSo.TechnologyLevel[i])) continue;
+                dataSo.CurrentLevel = i;
+                break;
             }
+
+            foreach (var update in updateList)
+            {
+                update.UpdateTime();
+            }
+
+
+            UpdateUI();
         }
 
-        for (int i = 0; i < UpdateList.Count; i++)
+        public void UpdateUI()
         {
-            UpdateList[i].UpdateTime();
-        }
-        UpdateUI();
-    }
+            timeText.text       = $"{dataSo.Month}月{dataSo.Day}日";
+            techPointText.text  = dataSo.TechnologyPoint.ToString(CultureInfo.InvariantCulture);
+            moneyText.text      = $"{dataSo.Money}块";
+            populationText.text = dataSo.Population.ToString(CultureInfo.InvariantCulture);
 
-    public void UpdateUI()
-    {
-        _timeText.text = _dataSo.Month.ToString() + "月" + _dataSo.Day.ToString() + "日";
-        _techPointText.text = _dataSo.TechnologyPoint.ToString();
-        _moneyText.text = _dataSo.Money.ToString() + "块";
-        _populationText.text = _dataSo.Population.ToString();
-
-        UpdateTree();
-    }
-
-    public void PauseGame()
-    {
-        Time.timeScale = 0;
-        _beginFlow = false;
-    }
-
-    public void ContinueGame()
-    {
-        Time.timeScale = 1f;
-        _beginFlow = true;
-    }
-
-    void UpdateTree()
-    {
-        for (int i = 0; i <= _dataSo.CurrentLevel; i++)
-        {
-            _treeIcons.GetChild(i).GetComponent<Image>().sprite = _dataSo.TreeIcons[i];
+            UpdateTree();
         }
 
-        for (int i = _dataSo.CurrentLevel + 1; i < 9; i++)
+        public void PauseGame()
         {
-            _treeIcons.GetChild(i).GetComponent<Image>().sprite = _dataSo.TreeLockedIcons[i];
+            Time.timeScale = 0;
+            _beginFlow     = false;
+        }
+
+        public void ContinueGame()
+        {
+            Time.timeScale = 1f;
+            _beginFlow     = true;
+        }
+
+        private void UpdateTree()
+        {
+            for (var i = 0; i <= dataSo.CurrentLevel; i++)
+            {
+                _treeIcons.GetChild(i).GetComponent<Image>().sprite = dataSo.TreeIcons[i];
+            }
+
+            for (var i = dataSo.CurrentLevel + 1; i < 9; i++)
+            {
+                _treeIcons.GetChild(i).GetComponent<Image>().sprite = dataSo.TreeLockedIcons[i];
+            }
         }
     }
 }

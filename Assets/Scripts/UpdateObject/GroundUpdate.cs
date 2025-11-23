@@ -1,91 +1,92 @@
+using SO;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundUpdate : UpdateObject
+namespace UpdateObject
 {
-    private GameObject groundsGameObject;
-    private GroundGroupSo _groundGroupSo;
-    private List<GroundSo> _grounds;
-    DataSo _dataSo;
-
-    public void Init(GroundGroupSo groundGroupSo, DataSo dataSo)
+    public class GroundUpdate : UpdateBase
     {
-        groundsGameObject = GameObject.Find("Grounds");
-        _dataSo = dataSo;
-        _groundGroupSo = groundGroupSo;
-        _grounds = _groundGroupSo.Grounds;
-    }
+        private GameObject     _groundsGameObject;
+        private GroundGroupSo  _groundGroupSo;
+        private List<GroundSo> _grounds;
+        private DataSo         _dataSo;
 
-    public override void UpdateTime()
-    {
-        _grounds = _groundGroupSo.Grounds;
-        int plantNumb = 0;
-        _dataSo.Population = 0;
-        for (int i = 0; i < _grounds.Count; i++)
+        public void Init(GroundGroupSo groundGroupSo, DataSo dataSo)
         {
-            if (_grounds[i].BiologyNumb == 0) continue;
-            BiologySo biologySo = _grounds[i].GroundBiologySo;
-            int currentBiologyNumb = _grounds[i].BiologyNumb;
-            _dataSo.Population += currentBiologyNumb;
-            if (biologySo.Numb == 8)
-            {
-                _dataSo.TechnologyPoint += 5 * currentBiologyNumb;
-                _dataSo.Money += 17 * currentBiologyNumb;
-            }
-
-            if (biologySo.Numb < 8 && biologySo.Numb > 4)
-            {
-                _dataSo.TechnologyPoint += 2 * currentBiologyNumb;
-                _dataSo.Money += 2 * currentBiologyNumb;
-            }
-
-            if (biologySo.Numb < 5)
-            {
-                _dataSo.Money += currentBiologyNumb / 4;
-                _dataSo.TechnologyPoint += currentBiologyNumb / 2;
-                plantNumb += currentBiologyNumb;
-            }
+            _groundsGameObject = GameObject.Find("Grounds");
+            _dataSo            = dataSo;
+            _groundGroupSo     = groundGroupSo;
+            _grounds           = _groundGroupSo.grounds;
         }
-        CountRain(plantNumb);
-    }
 
-    void CountRain(int plantNumb)
-    {
-        float rainPercent = 0.02f + Mathf.Log(plantNumb, 2) / 20f;
-        float precent = Random.Range(0, 1.0f);
-        if (precent < rainPercent)
+        public override void UpdateTime()
         {
-            for (int i = 0; i < 100; i++)
+            _grounds = _groundGroupSo.grounds;
+            var plantNumb = 0;
+            _dataSo.Population = 0;
+            foreach (var ground in _grounds)
             {
-                _groundGroupSo.Grounds[i].Water += 3f;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 100; i++)
-            {
-                if (_grounds[i].BiologyNumb != 0 && _grounds[i].GroundBiologySo.Numb < 6)
+                if (ground.BiologyNumb == 0) continue;
+                var biologySo          = ground.GroundBiologySo;
+                var currentBiologyNumb = ground.BiologyNumb;
+                _dataSo.Population += currentBiologyNumb;
+                switch (biologySo.numb)
                 {
-                    _groundGroupSo.Grounds[i].Water -=
-                        _grounds[i].Water * 0.01f * (1 - Mathf.Log(_grounds[i].BiologyNumb, 2) / 10);
-                }
-                else
-                {
-                    _groundGroupSo.Grounds[i].Water *= 0.98f;
+                    case 8 :
+                        _dataSo.TechnologyPoint += 5  * currentBiologyNumb;
+                        _dataSo.Money           += 17 * currentBiologyNumb;
+                        break;
+                    case < 8 and > 4 :
+                        _dataSo.TechnologyPoint += 2 * currentBiologyNumb;
+                        _dataSo.Money           += 2 * currentBiologyNumb;
+                        break;
+                    case < 5 :
+                        _dataSo.Money           += currentBiologyNumb / 4f;
+                        _dataSo.TechnologyPoint += currentBiologyNumb / 2f;
+                        plantNumb               += currentBiologyNumb;
+                        break;
                 }
             }
+
+            CountRain(plantNumb);
         }
 
-        for (int i = 0; i < 100; i++)
+        private void CountRain(int plantNumb)
         {
-            if (_groundGroupSo.Grounds[i].Water > 100) _groundGroupSo.Grounds[i].Water = 100f;
-            if (_groundGroupSo.Grounds[i].Water < 0) _groundGroupSo.Grounds[i].Water = 0;
-
-            for (int j = 2; j > -1; j--)
+            var rainPercent = 0.02f + Mathf.Log(plantNumb, 2) / 20f;
+            var precent     = Random.Range(0, 1.0f);
+            if (precent < rainPercent)
             {
-                if (_groundGroupSo.Grounds[i].Water >= _dataSo.GroundLevel[j])
+                for (var i = 0; i < 100; i++)
                 {
-                    groundsGameObject.transform.GetChild(i).GetComponent<Renderer>().material = _dataSo.Materials[j];
+                    _groundGroupSo.grounds[i].Water += 3f;
+                }
+            }
+            else
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    if (_grounds[i].BiologyNumb != 0 && _grounds[i].GroundBiologySo.numb < 6)
+                    {
+                        _groundGroupSo.grounds[i].Water -=
+                            _grounds[i].Water * 0.01f * (1 - Mathf.Log(_grounds[i].BiologyNumb, 2) / 10);
+                    }
+                    else
+                    {
+                        _groundGroupSo.grounds[i].Water *= 0.98f;
+                    }
+                }
+            }
+
+            for (var i = 0; i < 100; i++)
+            {
+                if (_groundGroupSo.grounds[i].Water > 100) _groundGroupSo.grounds[i].Water = 100f;
+                if (_groundGroupSo.grounds[i].Water < 0) _groundGroupSo.grounds[i].Water   = 0;
+
+                for (var j = 2; j > -1; j--)
+                {
+                    if (!(_groundGroupSo.grounds[i].Water >= _dataSo.GroundLevel[j])) continue;
+                    _groundsGameObject.transform.GetChild(i).GetComponent<Renderer>().material = _dataSo.Materials[j];
                     break;
                 }
             }
